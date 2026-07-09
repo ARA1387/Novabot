@@ -14,7 +14,22 @@ TOKEN = "8978022005:AAFBLbQJpv80AlikfnGOKuVD0wJC_1YB7Zo"
 ADMIN_ID = 8568921826
 
 DB_FILE = "answers.json"
+ASL_FILE = "asl.json"
 
+
+if not os.path.exists(ASL_FILE):
+    with open(ASL_FILE, "w", encoding="utf-8") as f:
+        json.dump({}, f)
+
+
+def load_asl():
+    with open(ASL_FILE, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def save_asl(data):
+    with open(ASL_FILE, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
 
 # ساخت دیتابیس اگر وجود نداشت
 if not os.path.exists(DB_FILE):
@@ -129,7 +144,58 @@ async def auto_reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
             break
 
 
+async def add_asl(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    if update.effective_user.id != ADMIN_ID:
+        return
+
+    if not update.message.reply_to_message:
+        await update.message.reply_text(
+            "باید روی پیام شخص ریپلای کنی."
+        )
+        return
+
+    try:
+        info = update.message.text.split(" ", 1)[1]
+
+        user_id = str(
+            update.message.reply_to_message.from_user.id
+        )
+
+        data = load_asl()
+        data[user_id] = info
+        save_asl(data)
+
+        await update.message.reply_text(
+            "✅ اصل ثبت شد."
+        )
+
+    except:
+        await update.message.reply_text(
+            "فرمت:\n/asl متن اصل"
+        )
+        async def get_asl(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    if not update.message.reply_to_message:
+        return
+
+    if update.message.text.strip() != "اصل":
+        return
+
+    user_id = str(
+        update.message.reply_to_message.from_user.id
+    )
+
+    data = load_asl()
+
+    if user_id in data:
+        await update.message.reply_text(
+            f"📌 اصل:\n\n{data[user_id]}"
+        )
+    else:
+        await update.message.reply_text(
+            "برای این شخص اصلی ثبت نشده."
+        )
 def main():
 
     app = Application.builder().token(TOKEN).build()
@@ -159,7 +225,17 @@ def main():
     print("Bot Started...")
     app.run_polling()
 
+app.add_handler(
+    CommandHandler("asl", add_asl)
+)
 
+
+app.add_handler(
+    MessageHandler(
+        filters.TEXT,
+        get_asl
+    )
+    )
 
 if __name__ == "__main__":
     main()
