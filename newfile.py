@@ -142,7 +142,36 @@ async def auto_reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if word in text:
             await update.message.reply_text(reply)
             break
+async def add_asl(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    if update.effective_user.id != ADMIN_ID:
+        return
+
+    if not update.message.reply_to_message:
+        await update.message.reply_text(
+            "باید روی پیام شخص ریپلای کنی."
+        )
+        return
+
+    try:
+        info = update.message.text.split(" ", 1)[1]
+
+        user_id = str(
+            update.message.reply_to_message.from_user.id
+        )
+
+        data = load_asl()
+        data[user_id] = info
+        save_asl(data)
+
+        await update.message.reply_text(
+            "✅ اصل ثبت شد."
+        )
+
+    except:
+        await update.message.reply_text(
+            "فرمت درست:\n/asl متن اصل"
+        )
 async def get_asl(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message.reply_to_message:
         return
