@@ -175,16 +175,14 @@ async def add_asl(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "فرمت:\n/asl متن اصل"
         )
     async def get_asl(update: Update, context: ContextTypes.DEFAULT_TYPE):
-
+    async def get_asl(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message.reply_to_message:
         return
 
     if update.message.text.strip() != "اصل":
         return
 
-    user_id = str(
-        update.message.reply_to_message.from_user.id
-    )
+    user_id = str(update.message.reply_to_message.from_user.id)
 
     data = load_asl()
 
@@ -221,21 +219,21 @@ def main():
         )
     )
 
-
-    print("Bot Started...")
-    app.run_polling()
-
-app.add_handler(
+    app.add_handler(
     CommandHandler("asl", add_asl)
 )
 
 
-app.add_handler(
+    app.add_handler(
     MessageHandler(
         filters.TEXT,
         get_asl
     )
-    )
+)
+    print("Bot Started...")
+    app.run_polling()
+
+
 
 if __name__ == "__main__":
     main()
