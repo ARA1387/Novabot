@@ -174,7 +174,7 @@ async def add_asl(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(
             "فرمت:\n/asl متن اصل"
         )
-    async def get_asl(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
     async def get_asl(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message.reply_to_message:
         return
