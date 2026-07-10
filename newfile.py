@@ -169,7 +169,7 @@ async def add_asl(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     except:
         await update.message.reply_text(
-            "فرمت درست:\n/asl متن اصل"
+            "فرمت درست:\n/setasl متن اصل"
         )
 async def get_asl(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message.reply_to_message:
@@ -209,8 +209,8 @@ def main():
 
 
     app.add_handler(
-    CommandHandler("setasl" "Setasl", add_asl)
-)
+    CommandHandler("setasl", add_asl)
+    )
 
 
     app.add_handler(
