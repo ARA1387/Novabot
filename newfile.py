@@ -154,8 +154,7 @@ async def add_asl(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     try:
-        info = update.message.text.split(" ", 1)[1]
-
+        info = update.message.reply_to_message.text
         user_id = str(
             update.message.reply_to_message.from_user.id
         )
@@ -210,14 +209,14 @@ def main():
 
 
     app.add_handler(
-    CommandHandler("asl", add_asl)
+    CommandHandler("setasl" "Setasl", add_asl)
 )
 
 
     app.add_handler(
     MessageHandler(
-        filters.TEXT,
-        get_asl
+    filters.Regex(r"^اصل$"),
+    get_asl
     )
 )
     app.add_handler(
