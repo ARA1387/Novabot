@@ -210,13 +210,6 @@ def main():
 
 
     app.add_handler(
-        MessageHandler(
-            filters.TEXT & ~filters.COMMAND,
-            auto_reply
-        )
-    )
-
-    app.add_handler(
     CommandHandler("asl", add_asl)
 )
 
@@ -227,6 +220,12 @@ def main():
         get_asl
     )
 )
+    app.add_handler(
+    MessageHandler(
+        filters.TEXT & ~filters.COMMAND,
+        auto_reply
+    )
+    )
     print("Bot Started...")
     app.run_polling()
 
